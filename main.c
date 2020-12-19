@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,124 +9,164 @@
 typedef struct uang{
     struct tm tm;
     time_t waktu;
-    int uang;
+    long int uang;
     int kategori;
     char note[50];
     struct uang *next;
-}LinkedList;
+    struct uang *prev;
+}Linked;
 
-typedef struct money{
-    struct tm tm;
-    time_t waktu;
-    int uang;
-    int kategori;
-    char note[50];
-    struct money *kiri, *kanan;
-}Tree;
-
-Tree* newNode(int item);
-void print(Tree* root);
-Tree* insert(Tree* node, int key);
-void arrangeWaktu(Tree* node, struct tm waktu, int key);
-void arrangeKategori(Tree* node, int key);
-int getCategory();
-void menuKategori();
-void getTime(Tree *waktu);
-Tree* passBST(Tree *old);
-Tree* arrangeCat(Tree *node, Tree *old, int key);
-
-int main(){
-    int i;
-    int duit;
-    Tree *root = NULL;
-    Tree *arrange = NULL;
-    for(i = 0; i<3; i++){
-        scanf("%d", &duit);
-        root = insert(root, duit);
-    }
-    arrange = arrangeCat(arrange, root, root->kategori);
-    print(root);
-    print(arrange);
-    getch();
-}
-
-void getTime(Tree *waktu){
+void getTime(Linked *waktu){
     time_t t = time(NULL);
     waktu->tm = *localtime(&t);
     time(&(waktu->waktu));
 }
 
-Tree* newNode(int item){ 
-    Tree* temp = (Tree*)malloc(sizeof(Tree)); 
-    temp->uang = item;
-    (temp->kategori) = getCategory();
-    printf("\nTambahkan Catatan\n");
-    fflush(stdin);
-    gets(temp->note);
-    getTime(temp);
-    temp->kiri = temp->kanan = NULL;
-    return temp;
+void swapAll(Linked *current, Linked *index){
+    int temp;
+    struct tm tmtemp;
+    time_t ttemp;
+    char stemp[20];
+
+    temp = current->uang;  
+    current->uang = index->uang;  
+    index->uang = temp;
+    temp = current->kategori;  
+    current->kategori = index->kategori;  
+    index->kategori = temp;  
+    tmtemp = current->tm;  
+    current->tm = index->tm;  
+    index->tm = tmtemp;
+    ttemp = current->waktu;  
+    current->waktu = index->waktu;  
+    index->waktu = ttemp;
+    strcpy(stemp, current->note);
+    strcpy(current->note, index->note);
+    strcpy(index->note, stemp);
 }
 
-void print(Tree* root){ 
-    if (root != NULL){ 
-        print(root->kiri); 
-        printf("%d ", root->uang);
-        printf("%d ", root->kategori);
-        printf(" %.19s", ctime(&(root->waktu)));
-        printf(" %s\n", root->note);
-        print(root->kanan);
-    }
+void sortList(Linked *head) {  
+    Linked *current = NULL, *index = NULL;  
+    //Check whether list is empty  
+    if(head == NULL) {  
+        return;  
+    }  
+    else {  
+        //Current will point to head  
+        for(current = head; current->next != NULL; current = current->next) {  
+            //Index will point to node next to current  
+            for(index = current->next; index != NULL; index = index->next) {  
+                //If current's data is greater than index's data, swap the data of current and index  
+                if(current->uang > index->uang) {  
+                    swapAll(current, index);
+                }  
+            }  
+        }  
+    }  
 }
 
-Tree* insert(Tree* node, int key){ 
-    if (node == NULL) 
-        return newNode(key);
-    if (key < node->uang) 
-        node->kiri = insert(node->kiri, key); 
-    else if (key > node->uang) 
-        node->kanan = insert(node->kanan, key);
-    return node; 
-}
-
-int getCategory(){
-    int s = 0;
-    menuKategori();
+/* Given a reference (pointer to pointer) to the head of a list
+   and an int, inserts a new node on the front of the list. */
+void push(Linked** head_ref)
+{
+    long int s;
+    /* 1. allocate node */
+    Linked* new_node = (Linked*)malloc(sizeof(Linked));
+ 
+    /* 2. put in the data  */
     scanf("%d", &s);
-    if (s == 1 || s == 2 || s == 3 || s == 4 || s == 5){
-        return s;
-    }else{
-        printf("Invalid input!!");
-        Sleep(3000);
-        fflush(stdin);
-        getCategory();
+    new_node->uang  = s;
+
+    getTime(new_node);
+
+    new_node->kategori = 5;
+
+    fflush(stdin);
+    gets(new_node->note);
+ 
+    /* 3. Make next of new node as head and previous as NULL */
+    new_node->next = (*head_ref);
+    new_node->prev = NULL;
+ 
+    /* 4. change prev of head node to new node */
+    if ((*head_ref) != NULL)
+        (*head_ref)->prev = new_node;
+ 
+    /* 5. move the head to point to the new node */
+    (*head_ref) = new_node;
+}
+  
+/* Given a reference (pointer to pointer) to the head of a list 
+   and a key, deletes the first occurrence of key in linked list */
+void deleteNode(Linked **head_ref, int key) 
+{ 
+    // Store head node 
+    Linked* temp = *head_ref, *prev; 
+  
+    // If head node itself holds the key to be deleted 
+    if (temp != NULL && temp->uang == key) 
+    { 
+        *head_ref = temp->next;   // Changed head 
+        free(temp);               // free old head 
+        return; 
+    } 
+
+    // Search for the key to be deleted, keep track of the 
+    // previous node as we need to change 'prev->next' 
+    while (temp != NULL && temp->uang != key) 
+    { 
+        prev = temp; 
+        temp = temp->next; 
+    } 
+  
+    // If key was not present in linked list 
+    if (temp == NULL) return; 
+  
+    // Unlink the node from linked list 
+    prev->next = temp->next; 
+  
+    free(temp);  // Free memory 
+} 
+  
+// This function prints contents of linked list starting from  
+// the given node 
+void printList(Linked *node) 
+{ 
+    Linked* last;
+    printf("\nTraversal in forward direction \n");
+    while (node != NULL) {
+        printf(" %d %d %s %.19s\n", node->uang, node->kategori, node->note, ctime(&(node->waktu)));
+        last = node;
+        node = node->next;
+    }
+ 
+    printf("\nTraversal in reverse direction \n");
+    while (last != NULL) {
+        printf(" %d %d %s %.19s\n", last->uang, last->kategori, last->note, ctime(&(last->waktu)));
+        last = last->prev;
     }
 }
-void menuKategori(){
-    printf("\nPilih Kategori Transaksi\n");
-    printf("1.Makanan & Minuman\n");
-    printf("2.Transportasi\n"); 
-    printf("3.Hiburan\n");
-    printf("4.Kebutuhan Sehari-hari\n");
-    printf("5.lainnya\n>> ");
-}
-Tree* passBST(Tree *old){ 
-    Tree* new = (Tree*)malloc(sizeof(Tree)); 
-    new->uang = old->uang;
-    new->kategori = old->kategori;
-    strcpy(new->note, old->note);
-    new->tm = old->tm;
-    new->waktu = old->waktu;
-    new->kiri = new->kanan = NULL;
-    return new;
-}
+  
+// Driver code 
+int main() 
+{ 
+    /* Start with the empty list */
+    Linked* head = NULL;
 
-Tree* arrangeCat(Tree *node, Tree *old, int key){ 
-    if (node == NULL) 
-        return passBST(old);
-    if (key < node->uang) 
-        node->kiri = arrangeCat(node->kiri, old->kiri, old->kiri->kategori); 
-    else if (key > node->uang) 
-        node->kanan = arrangeCat(node->kanan, old->kanan, old->kanan->kategori);
-    return node; 
+    push(&head); 
+    push(&head); 
+    push(&head); 
+    push(&head);
+    
+
+    puts("Created Linked List: "); 
+    printList(head); 
+    deleteNode(&head, 1); 
+    puts("\nLinked List after Deletion of 1: "); 
+    printList(head);
+    printf("\n");
+    sortList(head);
+    printList(head);
+
+    return 0; 
 }
