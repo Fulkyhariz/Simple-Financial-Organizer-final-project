@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h>
+#include "header_target.h"
 /*void help();
 
 void welcome(){
@@ -11,7 +12,7 @@ void welcome(){
 	printf("\t\t\t\t\t======================================\n");
 	printf("\t\t\t\t\t\t      MAIN MENU\n");
 	printf("\t\t\t\t\t\t       1. Start\n");
-	printf("\t\t\t\t\t\t       2. Setting\n");
+	printf("\t\t\t\t\t\t       2. Set Target\n");
 	printf("\t\t\t\t\t\t       3. Help\n");
 	printf("\t\t\t\t\t\t       4. Exit\n");
 	printf("\t\t\t\t\t\t       >> ");
@@ -22,7 +23,7 @@ void welcome(){
 			start();
 			break;
 		case 2:
-			setting();
+			settarget();
 			break;	
 		case 3:
 			help();
@@ -62,7 +63,7 @@ int start(){
 	
 	switch (optstart){
 		case 'Y':
-			setting();
+			settarget();
 			break;
 		case 'N':
 			mulai();
@@ -76,6 +77,7 @@ int start(){
 
 int mulai(){
 	int optmulai;
+	mulaimenu:
 	system("cls");
 	printf("Apa yang ingin ada lakukan pada program ini?\n");
 	printf("1. Tambah Transaksi\n");
@@ -101,5 +103,9 @@ int mulai(){
 			system("cls");
 			welcome();
 			break;
+		default:
+			printf("\nMohon masukkan input yang benar.");
+			Sleep(3000);
+			goto mulaimenu;
 	}
 }*/
