@@ -28,11 +28,11 @@ Node* sortedMergeUang(Node* a, Node* b, int pick)
         case 1:
             if (a->data.uang <= b->data.uang) { 
                 result = a; 
-                result->next = SortedMergeUang(a->next, b, pick); 
+                result->next = sortedMergeUang(a->next, b, pick); 
             } 
             else { 
                 result = b; 
-                result->next = SortedMergeUang(a, b->next, pick); 
+                result->next = sortedMergeUang(a, b->next, pick); 
             } 
             return (result);
         break;
@@ -40,11 +40,11 @@ Node* sortedMergeUang(Node* a, Node* b, int pick)
         case 2:
             if (a->data.uang >= b->data.uang) { 
                 result = a; 
-                result->next = SortedMergeUang(a->next, b, pick); 
+                result->next = sortedMergeUang(a->next, b, pick); 
             } 
             else { 
                 result = b; 
-                result->next = SortedMergeUang(a, b->next, pick); 
+                result->next = sortedMergeUang(a, b->next, pick); 
             } 
             return (result);
         break;
@@ -66,11 +66,11 @@ Node* sortedMergeKategori(Node* a, Node* b)
   
     if (a->data.kategori <= b->data.kategori) { 
         result = a; 
-        result->next = SortedMergeKategori(a->next, b); 
+        result->next = sortedMergeKategori(a->next, b); 
     } 
     else { 
         result = b; 
-        result->next = SortedMergeKategori(a, b->next); 
+        result->next = sortedMergeKategori(a, b->next); 
     } 
     return (result); 
 } 
@@ -88,11 +88,11 @@ Node* sortedMergeTanggal(Node* a, Node* b, int pick)
         case 1:
             if (difftime(a->data.waktu, b->data.waktu) <=0) { 
                 result = a; 
-                result->next = SortedMergeTanggal(a->next, b, pick); 
+                result->next = sortedMergeTanggal(a->next, b, pick); 
             } 
             else { 
                 result = b; 
-                result->next = SortedMergeTanggal(a, b->next, pick); 
+                result->next = sortedMergeTanggal(a, b->next, pick); 
             } 
             return (result); 
         break;
@@ -100,11 +100,11 @@ Node* sortedMergeTanggal(Node* a, Node* b, int pick)
         case 2:
             if (difftime(a->data.waktu, b->data.waktu) >=0) { 
                 result = a; 
-                result->next = SortedMergeTanggal(a->next, b, pick); 
+                result->next = sortedMergeTanggal(a->next, b, pick); 
             } 
             else { 
                 result = b; 
-                result->next = SortedMergeTanggal(a, b->next, pick); 
+                result->next = sortedMergeTanggal(a, b->next, pick); 
             } 
             return (result); 
         break;
@@ -161,23 +161,51 @@ void mergeSort(Node** headRef, int pick)
 	}else{
 
     }
-} 
+}
+
+void menuKategori(){
+    printf("\nPilih Kategori Transaksi\n");
+    printf("1.Makanan & Minuman\n");
+    printf("2.Transportasi\n"); 
+    printf("3.Hiburan\n");
+    printf("4.Kebutuhan Sehari-hari\n");
+    printf("5.lainnya\n>> ");
+}
+
+int getCategory(){
+    int s = 0;
+    menuKategori();
+    scanf("%d", &s);
+    if (s == 1 || s == 2 || s == 3 || s == 4 || s == 5){
+        return s;
+    }else{
+        printf("Invalid input!!");
+        Sleep(3000);
+        fflush(stdin);
+        getCategory();
+    }
+}
 
 void push(Node** head_ref)
 {
     long int s;
    
     Node* new_node = (Node*)malloc(sizeof(Node));
- 
+    system("cls");
+	printf("\nMasukan Nominal Transaksi\n>>");
     scanf("%d", &s);
     new_node->data.uang  = s;
-
+	
     getTime(&(new_node->data));
-
-    new_node->data.kategori = 5;
-
+	
+	system("cls");
+    new_node->data.kategori = getCategory();
+	
+	system("cls");
+	printf("\nTambahkan Catatan\n");
     fflush(stdin);
     gets(new_node->data.note);
+    system("cls");
  
     new_node->next = (*head_ref); 
    
@@ -219,34 +247,25 @@ int search(Node* head, int day, int month)
 
 void printList(Node *node) 
 { 
+    int i = 0;
+    printf("  no.\t    Besar Transaksi\t    Kategori                Waktu Input\t\tCatatan\n\n");
     Node* last;
-    printf("\nTraversal in forward direction \n");
+    char string[20];
     while (node != NULL) {
-        printf(" %d %d %s %.19s\n", node->data.uang, node->data.kategori, node->data.note, ctime(&(node->data.waktu)));
+    	if(node->data.kategori == 1){
+    		strcpy(string, "Makanan & Minuman    ");
+		}else if(node->data.kategori == 2){
+    		strcpy(string, "Transportasi         ");
+		}else if(node->data.kategori == 3){
+    		strcpy(string, "Hiburan              ");
+		}else if(node->data.kategori == 4){
+    		strcpy(string, "Kebutuhan Sehari-hari");
+		}else{
+			strcpy(string, "Kategori lain        ");
+		}
+        printf("  %d\t    Rp %ld.%.3ld\t\t    %.24s   %.16s\t%s   \n", i+1, node->data.uang/1000, node->data.uang%1000, string, ctime(&(node->data.waktu)), node->data.note);
         node = node->next;
-    }
-}
-
-void menuKategori(){
-    printf("\nPilih Kategori Transaksi\n");
-    printf("1.Makanan & Minuman\n");
-    printf("2.Transportasi\n"); 
-    printf("3.Hiburan\n");
-    printf("4.Kebutuhan Sehari-hari\n");
-    printf("5.lainnya\n>> ");
-}
-
-int getCategory(){
-    int s = 0;
-    menuKategori();
-    scanf("%d", &s);
-    if (s == 1 || s == 2 || s == 3 || s == 4 || s == 5){
-        return s;
-    }else{
-        printf("Invalid input!!");
-        Sleep(3000);
-        fflush(stdin);
-        getCategory();
+        i++;
     }
 }
 
