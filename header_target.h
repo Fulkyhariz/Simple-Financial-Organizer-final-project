@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 int target;
+int total;
 
 int settarget(){
 	FILE *ftarget;
@@ -25,7 +26,6 @@ int settarget(){
 /*
 int analisis(){
 	float persentase;
-	int total;
 	FILE *fanalisis;
 	
 	fanalisis = fopen("analisis.txt", "a");
