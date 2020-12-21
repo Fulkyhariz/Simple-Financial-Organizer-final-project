@@ -1,8 +1,30 @@
-#include <stdio.h>
-#include <windows.h>
-#include <conio.h>
-#include "header_target.h"
-/*void help();
+#ifndef FOO_H_  
+#define FOO_H_
+
+
+void help();
+void errorHandle();
+
+int setTarget(){
+	int target;
+	FILE *fptr;
+	
+	fptr = fopen("settarget.txt", "w");
+	
+	if(fptr == NULL){
+		printf("Error! File text tidak ditemukan.");
+		exit(1);
+	}
+	
+	printf("Masukkan target pengeluaran (tidak perlu menuliskan mata uang dan tanda koma): ");
+	scanf("%d", &target);
+	printf("\nTarget pengeluaran berhasil diperbaharui.\n");
+	
+	fprintf(fptr, "%d", target);
+	fclose(fptr);
+	
+	return 0;
+}
 
 void welcome(){
 	int menu;
@@ -31,11 +53,9 @@ void welcome(){
 		case 4:
 			exit(1);
 		default:
-			printf("\nMohon masukkan input yang benar.");
-			Sleep(3000);
-			system("cls");
-			goto mainMenu;
-			
+            errorHandle(1);
+		    welcome();
+        break;
 	}
 }
 
@@ -53,13 +73,12 @@ void help(){
 	system("cls");
 	welcome();
 }
-
 int start(){
 	char optstart;
 	startmenu:
 	system("cls");
 	printf("\nApakah ini merupakan pertama kali anda menggunakan program ini? (Y/N)\n>> ");
-	scanf("%s", &optstart);
+	scanf("%c", &optstart);
 	
 	switch (optstart){
 		case 'Y':
@@ -68,44 +87,30 @@ int start(){
 		case 'N':
 			mulai();
 			break;
+            
 		default:
-			printf("\nMohon masukkan input yang benar.");
-			Sleep(3000);
-			goto startmenu;
+            errorHandle(1);
+            start();
+		break;
 	}	
 }
 
-int mulai(){
-	int optmulai;
-	mulaimenu:
-	system("cls");
-	printf("Apa yang ingin ada lakukan pada program ini?\n");
-	printf("1. Tambah Transaksi\n");
-	printf("2. Lihat Riwayat\n");
-	printf("3. Lihat analisis pengeluaran\n");
-	printf("4. Kembali ke menu awal\n>> ");
-	scanf("%d", &optmulai);
-	
-	switch (optmulai){
-		case 1:
-			system("cls");
-			transaksi();
-			break;
-		case 2:
-			system("cls");
-			riwayat();
-			break;
-		case 3:
-			system("cls");
-			analisis();
-			break;
-		case 4:
-			system("cls");
-			welcome();
-			break;
-		default:
-			printf("\nMohon masukkan input yang benar.");
-			Sleep(3000);
-			goto mulaimenu;
+void menuKategori(){
+    printf("\nPilih Kategori Transaksi\n");
+    printf("1.Makanan & Minuman\n");
+    printf("2.Transportasi\n"); 
+    printf("3.Hiburan\n");
+    printf("4.Kebutuhan Sehari-hari\n");
+    printf("5.lainnya\n>> ");
+}
+
+void errorHandle(int pick){
+	if (pick == 1){
+		MessageBox(0, "Error!!", "Invalid Input", MB_OK); 
+	}else if (pick == 2){
+		MessageBox(0, "Error!!", "Memmory Not Allocated", MB_OK); 
 	}
-}*/
+    
+}
+
+#endif
