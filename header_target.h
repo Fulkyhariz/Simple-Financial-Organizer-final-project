@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int target;
-int total;
-
 int settarget(){
 	FILE *ftarget;
 	
@@ -23,27 +20,35 @@ int settarget(){
 	
 	return 0;
 }
-/*
-int analisis(){
+
+int analisis(Node *header){
+	Node *temp = header;
+	int jml[20];
+	long int money;
+	long int sum;
 	float persentase;
+	struct tm *pukul;
+	time_t Tpukul;
+	Tpukul = time(NULL);
+	pukul = localtime(&Tpukul);
 	FILE *fanalisis;
 	
-	fanalisis = fopen("analisis.txt", "a");
-	
-	if(fanalisis == NULL){
-		printf("Error! File text tidak ditemukan.");
-		exit(1);
+	while (temp != NULL){
+		if(node->data.tm.tm_mon == pukul->tm_mon){	
+			money = temp->data.uang;
+			sum = sum + money;
+			temp = temp.next;
+		}
 	}
-	persentase = (total/target)*100
-	printf("Besarnya pengeluaran yang telah dikeluarkan adalah sebesar Rp %d,00.\n", total);
+	ftarget = fopen("settarget.txt", "r");
+	fread(&target,sizeof(target),1,ftarget); //fread(&target,sizeof(target),1,fptr);
+	
+	persentase = (sum/target)*100;
+	
+	printf("Besarnya pengeluaran yang telah dikeluarkan adalah sebesar Rp %d,00.\n", sum);
 	printf("Dengan target yang telah ditetapkan sebelumnya, persentase pengeluaran yang dihasilkan sebesar %.2f%%", persentase);
 	
 	if(persentase > 100){
 		printf("Besarnya pengeluaran anda sudah melebihi dari target yang telah ditetapkan. Mohon untuk lebih bijak dalam mengelola keuangan anda.");
 	}
-	
-	fprintf(fanalisis, "Persentase pengeluaran: %.2f%%", persentase);
-	fclose(fanalisis);
-	
-	return 0;
-} */ 
+}
