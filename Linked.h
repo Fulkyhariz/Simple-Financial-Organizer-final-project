@@ -143,21 +143,21 @@ void mergeSort(Node** headRef, int pick)
         return; 
     } 
   
-    FrontBackSplit(head, &a, &b); 
+    frontBackSplit(head, &a, &b); 
    
-    MergeSort(&a, pick); 
-    MergeSort(&b, pick);
+    mergeSort(&a, pick); 
+    mergeSort(&b, pick);
   
     if(pick == 1){
-        *headRef = SortedMergeUang(a, b, 1);
+        *headRef = sortedMergeUang(a, b, 1);
 	}else if(pick == 2){
-        *headRef = SortedMergeUang(a, b, 2);
+        *headRef = sortedMergeUang(a, b, 2);
     }else if(pick == 3){
-        *headRef = SortedMergeTanggal(a, b, 1);
+        *headRef = sortedMergeTanggal(a, b, 1);
 	}else if(pick == 4){
-        *headRef = SortedMergeTanggal(a, b, 2);
+        *headRef = sortedMergeTanggal(a, b, 2);
 	}else if(pick == 5){
-		*headRef = SortedMergeKategori(a, b);
+		*headRef = sortedMergeKategori(a, b);
 	}else{
 
     }
