@@ -1,8 +1,10 @@
+/*Fungsi set target digunakan untuk mengatur target maksimal
+pengeluaran dalam satu bulan*/
 void setTarget(){
 	system("cls");
 	FILE *ftarget;
 	int target;
-	ftarget = fopen("settarget.txt", "w");
+	ftarget = fopen("settarget.txt", "w"); //program untuk membaca file settarget.txt
 	
 	if(ftarget == NULL){
 		errorHandle(2);
@@ -15,7 +17,7 @@ void setTarget(){
 	if(target == '0'){
 		welcome();
 	}else{	
-		fprintf(ftarget, "%d", target);
+		fprintf(ftarget, "%d", target); //melakukan penulisan ke file
 		fclose(ftarget);
 	
 		printf("\nTarget pengeluaran berhasil diperbaharui.\n");
@@ -26,6 +28,8 @@ void setTarget(){
 
 }
 
+/*fungsi yang digunakan untuk menggambarkan perbedaan antara target pengeluaran 
+dan total transaksi dalam waktu tersebut*/
 void visualize(int x,float y){
 	x = x/10000;y = y/10000;
     printf("\n");
@@ -50,19 +54,19 @@ void visualize(int x,float y){
     printf("pengeluaran      target\n\n");
 }
 
+/*menganalisa jumlah pengeluaran dalam satu bulan*/
 void analisis(Node *header){
+	FILE *ftarget;
 	Node *temp = header;
-	long int money;
-	long int sum;
-	float target;
-	float persentase;
+	long int money, sum;
+	float target, persentase;
 	struct tm *pukul;
+	
 	time_t Tpukul;
 	Tpukul = time(NULL);
-	pukul = localtime(&Tpukul);
-	FILE *ftarget;
+	pukul = localtime(&Tpukul); //mengambil waktu sekarang untuk memperoleh bulan
 	
-	
+	/*menambahkan semua transaksi total pada bulan yg sama dengan localtime*/
 	while (temp != NULL){
 		if(temp->data.tm.tm_mon == pukul->tm_mon){	
 			money = temp->data.uang;
@@ -70,9 +74,11 @@ void analisis(Node *header){
 			temp = temp->next;
 		}
 	}
+	
 	ftarget = fopen("settarget.txt", "r");
 	fscanf(ftarget, "%f", &target);
 	fclose(ftarget);
+	
 	persentase = (sum/target)*100;
 	
 	visualize(sum, target);
