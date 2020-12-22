@@ -1,8 +1,3 @@
-void gotoxy(short x, short y) {
-	COORD pos = {x, y};
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}
-
 void setTarget(){
 	system("cls");
 	FILE *ftarget;
@@ -82,12 +77,11 @@ void analisis(Node *header){
 	
 	visualize(sum, target);
 	
-	printf("Besarnya pengeluaran yang telah dikeluarkan adalah sebesar Rp %d,00.\n", sum);
-	printf("Dengan target yang telah ditetapkan sebelumnya\npersentase pengeluaran yang dihasilkan sebesar %.2f %\n", persentase);
+	printf("Besarnya pengeluaran yang telah dikeluarkan adalah sebesar Rp %d,00.\n\n", sum);
+	printf("Dengan target yang telah ditetapkan sebelumnya\npersentase pengeluaran yang dihasilkan sebesar %.2f%%\n\n", persentase);
 	
 	if(persentase > 100){
 		printf("Besarnya pengeluaran anda sudah melebihi dari target yang telah ditetapkan\nMohon untuk lebih bijak dalam mengelola keuangan anda.");
 	}
 	
 }
-
