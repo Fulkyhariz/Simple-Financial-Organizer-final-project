@@ -4,6 +4,7 @@ void riwayat(Node *head);
 void setTarget();
 void analisis(Node *header);
 
+/*program untuk menampilkan menu utama*/
 void welcome(){
 	system("cls");
 	int menu;
@@ -32,6 +33,7 @@ void welcome(){
 	}
 }
 
+/*menampilkan kegunaan keseluruhan dari program*/
 void help(){
 	system("cls");
 	printf("\n================================================== ");
@@ -46,10 +48,11 @@ void help(){
 	welcome();
 }
 
+/*menampilkan menu untuk data*/
 void mulai(){
     Node *head = NULL;
-    head = readFile(head);
-    fflush(stdin);
+    head = readFile(head); //membaca file sebelum perhitungan dimulai
+    fflush(stdin); //"membersihkan" standar input agar tidak mempengaruhi pilihan
 	int menu;
 	system("cls");
 	printf("Apa yang ingin ada lakukan pada program ini?\n");
@@ -87,6 +90,7 @@ void mulai(){
 	
 }
 
+/*fungsi untuk mengkonfirmasi apakah pengguna baru menggunakan program atau tidak*/
 int start(){
 	char optstart;
 	startmenu:
@@ -110,6 +114,7 @@ int start(){
 	}	
 }
 
+/*menampilkan menu berisi kategori yang ada*/
 void menuKategori(){
     printf("\nPilih Kategori Transaksi\n");
     printf("1.Makanan & Minuman\n");
@@ -119,6 +124,7 @@ void menuKategori(){
     printf("5.lainnya\n>> ");
 }
 
+/*fungsi untuk mengambil nilai yang ingin kita hapus node nya*/
 int hapus(){
 	int s;
 	printf("Masukan nominal yang ingin dihapus dari riwayat\n>>");
@@ -126,6 +132,8 @@ int hapus(){
 	return s;
 }
 
+/*program untuk menampilkan dan mengurutkan juga unutk menghapus node
+tertentu*/
 void riwayat(Node *head){
     int pick, asc;
 	system("cls");
@@ -161,6 +169,7 @@ void riwayat(Node *head){
     }
 }
 
+/*program untuk menampilkan box berisi peringatan*/
 void errorHandle(int pick){
 	if (pick == 1){
 		MessageBox(0, "Invalid Input", "Error!!", MB_OK); 
