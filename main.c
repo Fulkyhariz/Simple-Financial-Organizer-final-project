@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 
-typedef struct uang{
+typedef struct uang{//Struct
     time_t waktu;
     long int uang;
     int kategori;
@@ -13,7 +13,7 @@ typedef struct uang{
     struct tm tm;
 }Data;
 
-typedef struct linkedlist{
+typedef struct linkedlist{ //Linked list
     Data data;
     struct linkedlist *next;
 }Node;
@@ -22,9 +22,8 @@ typedef struct linkedlist{
 #include "Menu.h"
 #include "Analisis.h"
 
-int main(){
+void main(){
     while (1){
     welcome();
     }
 }
-
