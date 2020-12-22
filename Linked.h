@@ -2,12 +2,15 @@
 #define FOO_H_
 
 void menuKategori();
+
+/* program digunakan untuk memperoleh waktu lokal dan memasukannya ke linked list */
 void getTime(Data *waktu){
     time_t t = time(NULL);
     waktu->tm = *localtime(&t);
     time(&(waktu->waktu));
 }
 
+/*fungsi untuk menentukan apakah mau di sort secara ascending atau descending*/
 int ascdsc(){
     int s;
     printf("1. Ascending\n2. Descending\n>>");
@@ -15,7 +18,7 @@ int ascdsc(){
     return s;
 }
   
-
+/*program untuk mengurutkan berdasarkan jumlah transaksi*/
 Node* sortedMergeUang(Node* a, Node* b, int pick) 
 { 
     Node* result = NULL; 
@@ -51,7 +54,7 @@ Node* sortedMergeUang(Node* a, Node* b, int pick)
 
 } 
 
-
+/*program untuk mengurutkan berdasarkan kategori*/
 Node* sortedMergeKategori(Node* a, Node* b) 
 { 
     Node* result = NULL; 
@@ -72,6 +75,7 @@ Node* sortedMergeKategori(Node* a, Node* b)
     return (result); 
 } 
 
+/*program untuk mengurutkan berdasarkan waktu input*/
 Node* sortedMergeTanggal(Node* a, Node* b, int pick) 
 { 
     Node* result = NULL; 
@@ -103,6 +107,7 @@ Node* sortedMergeTanggal(Node* a, Node* b, int pick)
 	}
 } 
   
+/*digunakan dalam mergesort untuk membagi data menjadi dua bagian*/
 void frontBackSplit(Node* source, Node** frontRef, Node** backRef) 
 { 
     Node* fast; 
@@ -122,19 +127,21 @@ void frontBackSplit(Node* source, Node** frontRef, Node** backRef)
     slow->next = NULL; 
 } 
 
-void mergeSort(Node** headRef, int pick) 
+/*fungsi untuk melakukan merge sort*/
+void mergeSort(Node** headRef, int pick) //sorting
 { 
     Node* head = *headRef; 
     Node* a; 
     Node* b; 
   	int s;
     if ((head == NULL) || (head->next == NULL)) { 
-        return; 
+    	printf("memori tidak mencukupi");
+        exit(1);
     } 
   
     frontBackSplit(head, &a, &b); 
    
-    mergeSort(&a, pick); 
+    mergeSort(&a, pick); //program rekursi untk melakukan mergesort pada data yang sudah di split
     mergeSort(&b, pick);
   
     if(pick == 1){
@@ -148,10 +155,12 @@ void mergeSort(Node** headRef, int pick)
 	}else if(pick == 5){
 		*headRef = sortedMergeKategori(a, b);
 	}else{
-
+		printf("invalid input");
+		return;
     }
 }
 
+/*program untuk mendapatkan kategori yang ada*/
 int getCategory(){
     int s = 0;
     menuKategori();
@@ -166,11 +175,12 @@ int getCategory(){
     }
 }
 
+/*program untuk memasukan data ke linked list*/
 void push(Node** head_ref)
 {
     long int s;
    
-    Node* new_node = (Node*)malloc(sizeof(Node));
+    Node* new_node = (Node*)malloc(sizeof(Node)); //dynamic memory allocation
     system("cls");
 	printf("\nMasukan Nominal Transaksi\n>>");
     scanf("%d", &s);
@@ -191,12 +201,13 @@ void push(Node** head_ref)
    
     (*head_ref) = new_node;
 }
-  
+
+/*program untuk menghapus sebuah node*/
 void deleteNode(Node **head_ref, int key) 
 { 
     Node* temp = *head_ref, *prev; 
   
-    if (temp != NULL && temp->data.uang == key) 
+    if (temp != NULL && temp->data.uang == key)  //Searching
     { 
         *head_ref = temp->next;   
         free(temp);               
@@ -213,18 +224,7 @@ void deleteNode(Node **head_ref, int key)
     free(temp);  
 }
 
-int search(Node* head, int day, int month) 
-{ 
-    Node* current = head;  
-    while (current != NULL) 
-    { 
-        if (current->data.tm.tm_mday == day && current->data.tm.tm_mon == month) 
-            return 1; 
-        current = current->next; 
-    } 
-    return 0; 
-} 
-
+/*program untuk menampilkan semua data yang ada*/
 void printList(Node *node) 
 { 
     int i = 0;
@@ -249,6 +249,7 @@ void printList(Node *node)
     }
 }
 
+/*program untuk membaca semua data dari file*/
 Node* readFile(Node *head) 
 { 
     Node db, read, *data; 
@@ -258,7 +259,7 @@ Node* readFile(Node *head)
     if(fp == NULL){
         printf("gagal");
     }
-	while (fread(&(read.data), sizeof(read.data),1,fp) > 0){
+	while (fread(&(read.data), sizeof(read.data),1,fp) > 0){//digunakan untuk menghitung jumlah node yang ada di linked list
     	j++;
     	banyak++;
 	}
@@ -267,7 +268,7 @@ Node* readFile(Node *head)
 	data = (Node*)malloc(banyak * sizeof(Node));
    	fp = fopen("database.txt", "r");
    	j = 0;
-   	while (fread(&(read.data), sizeof(read.data),1,fp) > 0 && j<banyak){
+   	while (fread(&(read.data), sizeof(read.data),1,fp) > 0 && j<banyak){//membaca file dan memindahkan isinya ke linked list
         Node* new_node = (Node*)malloc(sizeof(Node));
   		strcpy(new_node->data.note, read.data.note);
 	   	new_node->data.kategori = read.data.kategori;
@@ -284,6 +285,7 @@ Node* readFile(Node *head)
     return head;
 }
 
+/*program untuk menuliskan data dari node ke file*/
 void writeFile(Node *head){
     FILE *fp;
     Node *temp = head;
