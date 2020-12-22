@@ -62,6 +62,8 @@ void mulai(){
 	if (menu == 1){
 		system("cls");
 		push(&head);
+		writeFile(head);
+		mulai();
 	}else if(menu == 2){
 		system("cls");
 		riwayat(head);
@@ -119,7 +121,7 @@ void menuKategori(){
 
 int hapus(){
 	int s;
-	printf("Masukan nominal yang ingin dihapus dari riwayat");
+	printf("Masukan nominal yang ingin dihapus dari riwayat\n>>");
 	scanf("%d", &s);
 	return s;
 }
@@ -131,7 +133,8 @@ void riwayat(Node *head){
 	printf("1. Jumlah Transaksi\n");
 	printf("2. Waktu input\n");
 	printf("3. Kategori\n");
-	printf("4. Hapus data");
+	printf("\natau:\n");
+	printf("4. Hapus data\n");
 	printf("5. Kembali ke menu awal\n>> ");
 	scanf("%d", &pick);
 
@@ -148,7 +151,8 @@ void riwayat(Node *head){
     }else if (pick == 2 && asc == 2){
         mergeSort(&head, 4);
     }else if (pick == 4){
-    	deleteNode(head, hapus());
+    	deleteNode(&head, hapus());
+    	printList(head);
     	getch();
     	mulai();
 	}else{
@@ -165,4 +169,3 @@ void errorHandle(int pick){
 	}
     
 }
-
